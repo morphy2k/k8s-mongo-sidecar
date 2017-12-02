@@ -39,20 +39,13 @@ const workloop = () => {
   }
 
   //Do in series so if k8s.getMongoPods fails, it doesn't open a db connection
-  async.series([
-    k8s.getMongoPods,
-    mongo.getDb
-  ], (err, results) => {
-    let db = null;
-    if (Array.isArray(results) && results.length === 2) {
-      db = results[1];
-    }
 
-    if (err) {
-      return finish(err, db);
-    }
+  const getPods = k8s.getMongoPods();
+  const getDB = mongo.getDb();
 
-    let pods = results[0];
+  Promise.all([getPods, getDB]).then(results => {
+    const pods = results[0];
+    const db = results[1];
 
     //Lets remove any pods that aren't running or haven't been assigned an IP address yet
     for (let i = pods.length - 1; i >= 0; i--) {
@@ -85,6 +78,8 @@ const workloop = () => {
 
       inReplicaSet(db, pods, status, err => finish(err, db));
     });
+  }).catch(err => {
+    finish(err);
   });
 };
 
