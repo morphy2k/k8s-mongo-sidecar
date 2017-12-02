@@ -35,7 +35,7 @@ const getDb = host => {
     const url = `mongodb://${auth}${host}:${config.mongoPort}/${config.database}`;
 
     mongoDB.connect(url, mongoOptions, (err, db) => {
-      if (err) reject(err);
+      if (err) return reject(err);
 
       resolve(db);
     });
@@ -184,9 +184,9 @@ const isInReplSet = (ip, done) => {
       else {
         done(null, false);
       }
-    }).catch(err => {
-      done(err);
     });
+  }).catch(err => {
+    done(err);
   });
 };
 
