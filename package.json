@@ -33,7 +33,7 @@
     "mocha": "^2.2.4"
   },
   "dependencies": {
-    "async": "^2.6.0",
+    "async": "^1.5.2",
     "forever": "^0.15.3",
     "ip": "^1.1.5",
     "moment": "^2.10.2",

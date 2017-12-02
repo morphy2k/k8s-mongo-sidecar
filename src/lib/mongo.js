@@ -8,18 +8,18 @@ const config = require('./config');
 
 const localhost = '127.0.0.1'; //Can access mongo as localhost from a sidecar
 
-const getDb = done => {
+const getDb = (host, done) => {
   //If they called without host like getDb(function(err, db) { ... });
-  // if (arguments.length === 1) {
-  //   if (typeof arguments[0] === 'function') {
-  //     done = arguments[0];
-  //     host = localhost;
-  //   } else {
-  //     throw new Error('getDb illegal invocation. User either getDb(\'options\', function(err, db) { ... }) OR getDb(function(err, db) { ... })');
-  //   }
-  // }
+  if (arguments.length === 1) {
+    if (typeof arguments[0] === 'function') {
+      done = arguments[0];
+      host = localhost;
+    } else {
+      throw new Error('getDb illegal invocation. User either getDb(\'options\', function(err, db) { ... }) OR getDb(function(err, db) { ... })');
+    }
+  }
 
-  const host = localhost;
+  host = host || localhost;
   let mongoOptions = {
     authSource: 'admin'
   };
