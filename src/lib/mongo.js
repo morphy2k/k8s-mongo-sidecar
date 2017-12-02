@@ -42,6 +42,8 @@ const getDb = (host, done) => {
   const mongoDB = new MongoClient();
   const url = `mongodb://${auth}${host}:${config.mongoPort}/${config.database}`;
 
+  console.log(url);
+
   mongoDB.connect(url, mongoOptions, (err, db) => {
     if (err) return done(err);
 
