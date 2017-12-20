@@ -40,7 +40,7 @@
   "dependencies": {
     "forever": "^0.15.3",
     "ip": "^1.1.5",
-    "moment": "^2.20.1",
+    "luxon": "^0.2.9",
     "mongodb": "^3.0.0-rc0",
     "node-kubernetes-client": "^0.3.2"
   }
