@@ -4,7 +4,7 @@ const dns = require('dns');
 const os = require('os');
 const {promisify} = require('util');
 
-const moment = require('moment');
+const { DateTime } = require('luxon');
 const ip = require('ip');
 
 const mongo = require('./mongo');
@@ -253,7 +253,7 @@ const addrToRemoveLoop = members => {
 };
 
 const memberShouldBeRemoved = member => !member.health
-      && moment().subtract(unhealthySeconds, 'seconds').isAfter(member.lastHeartbeatRecv);
+      && DateTime.local().minus({ seconds: unhealthySeconds }) > DateTime.fromISO(member.lastHeartbeatRecv);
 
 /**
  * @param pod this is the Kubernetes pod, containing the info.
