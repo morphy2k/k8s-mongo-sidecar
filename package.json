@@ -1,15 +1,28 @@
 {
-  "name": "mongo-k8s-sidecar",
+  "name": "k8s-mongo-sidecar",
+  "description": "Kubernetes sidecar for mongoDB",
   "version": "0.1.0",
-  "description": "Kubernetes sidecar for mongo",
+  "license": "MIT",
+  "author": {
+    "name": "Markus Wiegand",
+    "email": "mail@morphy2k.io",
+    "url": "https://morphy2k.io"
+  },
+  "contributors": "https://github.com/morphy2k/k8s-mongo-sidecar/graphs/contributors",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/morphy2k/k8s-mongo-sidecar.git"
+  },
+  "bugs": {
+    "url": "https://github.com/morphy2k/k8s-mongo-sidecar/issues"
+  },
+  "engines": {
+    "node": ">=8.9.0"
+  },
   "main": "src/index.js",
   "scripts": {
     "start": "forever src/index.js",
     "watch": "forever -w src/index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/cvallance/mongo-k8s-sidecar.git"
   },
   "keywords": [
     "kubernetes",
@@ -21,12 +34,6 @@
     "replica",
     "replicaset"
   ],
-  "author": "Charles Vallance <vallance.charles@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/cvallance/mongo-k8s-sidecar/issues"
-  },
-  "homepage": "https://github.com/cvallance/mongo-k8s-sidecar",
   "devDependencies": {
     "chai": "^4.1.2",
     "eslint": "^4.13.0",
