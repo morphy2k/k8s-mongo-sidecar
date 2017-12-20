@@ -2,15 +2,15 @@
 
 This project is as a PoC to setup a MongoDB replica set using Kubernetes. It should handle resizing of any type and be resilient to the various conditions both MongoDB and Kubernetes can find themselves in.
 
+It's a fork of [cvallance/mongo-k8s-sidecar](https://github.com/cvallance/mongo-k8s-sidecar) with (many) changes and improvements.
+
 ## How to use it
 
 The docker image is hosted on Docker Hub and can be found here:
-[https://hub.docker.com/r/cvallance/mongo-k8s-sidecar/](https://hub.docker.com/r/cvallance/mongo-k8s-sidecar/)
+[https://hub.docker.com/r/morphy/k8s-mongo-sidecar](https://hub.docker.com/r/morphy/k8s-mongo-sidecar)
 
 An example Kubernetes replication controller can be found in the examples directory on GitHub:
-[https://github.com/cvallance/mongo-k8s-sidecar](https://github.com/cvallance/mongo-k8s-sidecar)
-
-There you will also find some helper scripts to test out creating the replica set and resizing it.
+[https://github.com/morphy2k/k8s-mongo-sidecar](https://github.com/morphy2k/k8s-mongo-sidecar)
 
 
 ### Settings
@@ -99,13 +99,3 @@ kubectl create secret generic mongo-ssl \
 --from-file=key.pem \
 --from-file=cert.pem
 ```
-
-## Debugging
-
-TODO: Instructions for cloning, mounting and watching
-
-## Still to do
-
--   Add tests!
--   Add to circleCi
--   Alter k8s call so that we don't have to filter in memory
