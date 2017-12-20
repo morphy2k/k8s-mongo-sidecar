@@ -70,7 +70,7 @@ const verifyCorrectnessOfDomain = async clusterDomain => {
 /**
  * @returns k8sMongoServiceName should be the name of the (headless) k8s service operating the mongo pods.
  */
-const getK8sMongoServiceName = () => process.env.KUBERNETES_SERVICE_NAME || process.env.KUBERNETES_MONGO_SERVICE_NAME || false;
+const getK8sMongoServiceName = () => process.env.KUBERNETES_SERVICE_NAME || 'mongo';
 
 /**
  * @returns mongoPort this is the port on which the mongo instances run. Default is 27017.
