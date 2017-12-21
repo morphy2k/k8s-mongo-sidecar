@@ -22,7 +22,10 @@
   "main": "src/index.js",
   "scripts": {
     "start": "forever src/index.js",
-    "watch": "forever -w src/index.js"
+    "watch": "forever -w src/index.js",
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "echo \"No tests\""
   },
   "keywords": [
     "kubernetes",
