@@ -2,12 +2,10 @@
 
 With the release of [Stateful Sets](http://kubernetes.io/docs/concepts/abstractions/controllers/statefulsets/) and custom [Storage Classes](http://kubernetes.io/docs/user-guide/persistent-volumes/#storageclasses), Kubernetes can automate all of the underlying infra required to run a MongoDB Replica Sets
 
-*Note:* Stateful Sets are beta. **This requires Kubernetes 1.5.1**
-
 ## Before You Start
 
-- Have a Kubernetes Cluster created with at least version 1.5.1
-- Have admin access to the cluster
+-   Have a Kubernetes Cluster created with at least version 1.5.1
+-   Have admin access to the cluster
 
 ## Creating the Storage Class
 
@@ -19,26 +17,26 @@ For example, this [YAML](googlecloud_ssd.yaml) uses a Google Cloud SSD Persisten
 
 Create the Storage Class with the `kubectl` tool.
 
-```
+```bash
 kubectl apply -f googlecloud_ssd.yaml
 ```
 
 Replace `googlecloud_ssd.yaml` with another configuration file if you are not using Google Cloud. For example, if you are running Kubernetes on Azure, you can use the Azure SSD [YAML](azure_ssd.yaml). It uses the same name, "fast", so your application does not need to understand the underlying platform.
 
-```
+```bash
 kubectl apply -f azure_ssd.yaml
 ```
 
 If you are using Minikube for local testing:
 
-```
+```bash
 kubectl apply -f minikube_hostpath.yaml
 ```
 
 
 Verify that the Storage Class is created
 
-```
+```bash
 $ kubectl get storageclass   
 NAME      TYPE
 fast       kubernetes.io/gce-pd
@@ -48,12 +46,12 @@ fast       kubernetes.io/gce-pd
 
 The [example YAML](mongo-statefulset.yaml) creates a [Headless Service](http://kubernetes.io/docs/user-guide/services/#headless-services) and a [Stateful Set](http://kubernetes.io/docs/concepts/abstractions/controllers/statefulsets/). It uses the Storage Class created in the previous step, and provisions a 100Gi volume per replica. Modify these values as you see fit.
 
-```
+```bash
 kubectl apply -f mongo-statefulset.yaml
 ```
 
 Verify that the Stateful Set is created
-```
+```bash
 $ kubectl get statefulset
 NAME      DESIRED   CURRENT   AGE
 mongo     3         0         12m
@@ -68,7 +66,7 @@ mongo     3         3         12m
 
 You can also verify that the Volumes were created as well.
 
-```
+```bash
 $ kubectl get pvc         
 NAME                               STATUS    VOLUME                                     CAPACITY   ACCESSMODES   AGE
 mongo-persistent-storage-mongo-0   Bound     pvc-af87f9d5-d3ab-11e6-8cf2-42010af0018d   100Gi      RWO           12m
