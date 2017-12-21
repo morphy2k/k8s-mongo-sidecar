@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/morphy2k/k8s-mongo-sidecar.svg?branch=master)](https://travis-ci.org/morphy2k/k8s-mongo-sidecar) [![David](https://david-dm.org/morphy2k/k8s-mongo-sidecar.svg)](https://david-dm.org)
+
 # Mongo Kubernetes Replica Set Sidecar
 
 This project is as a PoC to setup a MongoDB replica set using Kubernetes. It should handle resizing of any type and be resilient to the various conditions both MongoDB and Kubernetes can find themselves in.
