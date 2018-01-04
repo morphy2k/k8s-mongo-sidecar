@@ -2,7 +2,7 @@
 
 const dns = require('dns');
 const os = require('os');
-const {promisify} = require('util');
+const { promisify } = require('util');
 
 const { DateTime } = require('luxon');
 const ip = require('ip');
