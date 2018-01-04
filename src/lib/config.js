@@ -1,7 +1,7 @@
 'use strict';
 
 const dns = require('dns');
-const {promisify} = require('util');
+const { promisify } = require('util');
 
 
 const getK8sMongoPodLabels = () => process.env.KUBERNETES_POD_LABELS || false;
