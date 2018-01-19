@@ -38,12 +38,12 @@
     "replicaset"
   ],
   "devDependencies": {
-    "eslint": "^4.14.0"
+    "eslint": "^4.15.0"
   },
   "dependencies": {
     "forever": "^0.15.3",
     "ip": "^1.1.5",
-    "luxon": "^0.2.11",
+    "luxon": "^0.3.1",
     "mongodb": "^3.0.1",
     "node-kubernetes-client": "^0.3.2"
   }
