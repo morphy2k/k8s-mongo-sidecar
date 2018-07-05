@@ -181,16 +181,20 @@ const removeDeadMembers = (rsConfig, addrsToRemove) => {
 };
 
 const isInReplSet = async ip => {
-  let client = null;
+  let client;
   try {
     client = await getClient(ip);
-    await replSetGetConfig(client);
+  } catch (err) {
+    return Promise.reject(err);
+  }
+
+  try {
+    await replSetGetConfig(client.db(config.mongoDatabase));
     return true;
   } catch (err) {
-    if (err.code === 93) return false;
-    return Promise.reject(err);
+    return false;
   } finally {
-    if (client) client.close();
+    client.close();
   }
 };
 
