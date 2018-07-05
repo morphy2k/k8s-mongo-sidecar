@@ -24,6 +24,7 @@ const init = async() => {
   const lookup = promisify(dns.lookup);
   try {
     hostIp = await lookup(hostName);
+    hostIp = hostIp.address;
     hostIpAndPort = hostIp + ':' + config.mongoPort;
   } catch (err) {
     return Promise.reject(err);
@@ -160,8 +161,8 @@ const notInReplicaSet = async (db, pods) => {
 
     const results = await Promise.all(testRequests);
 
-    for (let i in results) {
-      if (results[i]) return; // There's one in a rs, nothing to do
+    for (const key of results) {
+      if (key) return; // There's one in a rs, nothing to do
     }
 
     if (podElection(pods)) {
