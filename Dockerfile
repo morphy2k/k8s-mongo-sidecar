@@ -10,6 +10,5 @@ COPY package.json package-lock.json /opt/morphy2k/k8s-mongo-sidecar/
 RUN npm install
 
 COPY ./src /opt/morphy2k/k8s-mongo-sidecar/src
-COPY .foreverignore /opt/morphy2k/.foreverignore
 
 CMD ["npm", "start"]
