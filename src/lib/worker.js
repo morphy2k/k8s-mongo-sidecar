@@ -25,10 +25,17 @@ const init = async() => {
   try {
     hostIp = await lookup(hostName);
     hostIpAndPort = hostIp + ':' + config.mongoPort;
-    return;
   } catch (err) {
     return Promise.reject(err);
   }
+
+  try {
+    await k8s.init();
+  } catch (err) {
+    return Promise.reject(err);
+  }
+
+  return;
 };
 
 const workloop = async() => {

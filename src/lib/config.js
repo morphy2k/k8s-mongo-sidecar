@@ -3,26 +3,6 @@
 const dns = require('dns');
 const { promisify } = require('util');
 
-
-const getK8sMongoPodLabels = () => process.env.KUBERNETES_POD_LABELS || false;
-
-const getK8sMongoPodLabelCollection = () => {
-  const podLabels = getK8sMongoPodLabels();
-  if (!podLabels) {
-    return false;
-  }
-  let labels = podLabels.split(',');
-  for (let i in labels) {
-    const keyAndValue = labels[i].split('=');
-    labels[i] = {
-      key: keyAndValue[0],
-      value: keyAndValue[1]
-    };
-  }
-
-  return labels;
-};
-
 const getK8sROServiceAddress = () => `${process.env.KUBERNETES_SERVICE_HOST}:${process.env.KUBERNETES_SERVICE_PORT}`;
 
 /**
@@ -104,8 +84,7 @@ module.exports = {
   k8sClusterDomain: getK8sClusterDomain(),
   k8sROServiceAddress: getK8sROServiceAddress(),
   k8sMongoServiceName: getK8sMongoServiceName(),
-  k8sMongoPodLabels: getK8sMongoPodLabels(),
-  k8sMongoPodLabelCollection: getK8sMongoPodLabelCollection(),
+  k8sMongoPodLabels: process.env.KUBERNETES_POD_LABELS,
 
   mongoPort: getMongoPort(),
   mongoUsername: process.env.MONGO_USERNAME,
@@ -117,7 +96,7 @@ module.exports = {
   mongoSSLKey: process.env.MONGO_SSL_KEY,
   mongoSSLPassword: process.env.MONGO_SSL_PASS,
   mongoSSLCRL: process.env.MONGO_SSL_CRL,
-  mongoSSLServerIdentityCheck: process.env.MONGO_SSL_IDENTITY_CHECK !== 'false',
+  mongoSSLServerIdentityCheck: stringToBool(process.env.MONGO_SSL_IDENTITY_CHECK),
 
   loopSleepSeconds: process.env.SIDECAR_SLEEP_SECONDS || 5,
   unhealthySeconds: process.env.SIDECAR_UNHEALTHY_SECONDS || 15,
