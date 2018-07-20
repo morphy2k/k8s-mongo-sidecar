@@ -4,7 +4,7 @@
 
 This project is as a PoC to setup a MongoDB replica set using Kubernetes. It should handle resizing of any type and be resilient to the various conditions both MongoDB and Kubernetes can find themselves in.
 
-It's a fork of [cvallance/mongo-k8s-sidecar](https://github.com/cvallance/mongo-k8s-sidecar) with (many) changes and improvements.
+*It's a fork of [cvallance/mongo-k8s-sidecar](https://github.com/cvallance/mongo-k8s-sidecar) with (many) changes and improvements.*
 
 ## How to use it
 
@@ -12,7 +12,7 @@ The docker image is hosted on Docker Hub and can be found here:
 [https://hub.docker.com/r/morphy/k8s-mongo-sidecar](https://hub.docker.com/r/morphy/k8s-mongo-sidecar)
 
 An example Kubernetes replication controller can be found in the examples directory on GitHub:
-[https://github.com/morphy2k/k8s-mongo-sidecar](https://github.com/morphy2k/k8s-mongo-sidecar)
+[https://github.com/morphy2k/k8s-mongo-sidecar](https://github.com/morphy2k/k8s-mongo-sidecar/tree/master/example)
 
 
 ### Settings
@@ -65,7 +65,7 @@ Environment variables, Volume & Volume Mounts
             - name: mongo-ssl
               mountPath: /data/ssl/mongo
         - name: mongo-sidecar
-          image: cvallance/mongo-k8s-sidecar:latest
+          image: morphy/k8s-mongo-sidecar
           env:
             - name: KUBERNETES_POD_LABELS
               value: "role=mongo,environment=prod"
