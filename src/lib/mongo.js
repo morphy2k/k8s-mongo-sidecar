@@ -133,22 +133,19 @@ const addNewMembers = (rsConfig, addrsToAdd) => {
   // Follows what is basically in mongo's rs.add function
   let max = 0;
 
-  for (let i in rsConfig.members) {
-    if (rsConfig.members[i]._id > max) {
-      max = rsConfig.members[i]._id;
+  for (const members of rsConfig.members) {
+    if (members._id > max) {
+      max = members._id;
     }
   }
 
-  for (let i in addrsToAdd) {
-    const addrToAdd = addrsToAdd[i];
-
+  for (const addr of addrsToAdd) {
     // Somehow we can get a race condition where the member config has been updated since we created the list of
     // addresses to add (addrsToAdd) ... so do another loop to make sure we're not adding duplicates
     let exists = false;
-    for (let j in rsConfig.members) {
-      let member = rsConfig.members[j];
-      if (member.host === addrToAdd) {
-        console.log('Host [%s] already exists in the Replicaset. Not adding...', addrToAdd);
+    for (const member of rsConfig.members) {
+      if (member.host === addr) {
+        console.info('Host [%s] already exists in the Replicaset. Not adding...', addr);
         exists = true;
         break;
       }
@@ -158,7 +155,7 @@ const addNewMembers = (rsConfig, addrsToAdd) => {
 
     const cfg = {
       _id: ++max,
-      host: addrToAdd
+      host: addr
     };
 
     rsConfig.members.push(cfg);
@@ -168,12 +165,10 @@ const addNewMembers = (rsConfig, addrsToAdd) => {
 const removeDeadMembers = (rsConfig, addrsToRemove) => {
   if (!addrsToRemove || !addrsToRemove.length) return;
 
-  for (let i in addrsToRemove) {
-    const addrToRemove = addrsToRemove[i];
-    for (let j in rsConfig.members) {
-      const member = rsConfig.members[j];
-      if (member.host === addrToRemove) {
-        rsConfig.members.splice(j, 1);
+  for (const addr of addrsToRemove) {
+    for (const i in rsConfig.members) {
+      if (rsConfig.members[i].host === addr) {
+        rsConfig.members.splice(i, 1);
         break;
       }
     }
