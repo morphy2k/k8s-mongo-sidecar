@@ -76,7 +76,7 @@ const replSetGetConfig = db => db.admin().command({ replSetGetConfig: 1 }, {})
 const replSetGetStatus = db => db.admin().command({ replSetGetStatus: {} }, {});
 
 const initReplSet = async (db, hostIpAndPort) => {
-  console.log('initReplSet', hostIpAndPort);
+  console.info('initReplSet', hostIpAndPort);
 
   try {
     await db.admin().command({ replSetInitiate: {} }, {});
@@ -84,7 +84,7 @@ const initReplSet = async (db, hostIpAndPort) => {
     // We need to hack in the fix where the host is set to the hostname which isn't reachable from other hosts
     const rsConfig = await replSetGetConfig(db);
 
-    console.log('initial rsConfig is', rsConfig);
+    console.info('initial rsConfig is', rsConfig);
     rsConfig.configsvr = config.isConfigRS;
     rsConfig.members[0].host = hostIpAndPort;
 
@@ -109,7 +109,7 @@ const initReplSet = async (db, hostIpAndPort) => {
 };
 
 const replSetReconfig = (db, rsConfig, force) => {
-  console.log('replSetReconfig', rsConfig);
+  console.info('replSetReconfig', rsConfig);
 
   rsConfig.version++;
 
