@@ -101,16 +101,13 @@ const finish = (err, client) => {
 };
 
 const inReplicaSet = async (db, pods, status) => {
-
   // If we're already in a rs and we ARE the primary, do the work of the primary instance (i.e. adding others)
   // If we're already in a rs and we ARE NOT the primary, just continue, nothing to do
   // If we're already in a rs and NO ONE is a primary, elect someone to do the work for a primary
   const members = status.members;
 
   let primaryExists = false;
-  for (let i in members) {
-    const member = members[i];
-
+  for (const member of members) {
     if (member.state === 1) {
       if (member.self) return primaryWork(db, pods, members, false);
 
@@ -151,9 +148,7 @@ const notInReplicaSet = async (db, pods) => {
     // If we're not in a rs and others ARE in the rs, just continue, another path will ensure we will get added
     // If we're not in a rs and no one else is in a rs, elect one to kick things off
     let testRequests = [];
-    for (let i in pods) {
-      const pod = pods[i];
-
+    for (const pod of pods) {
       if (pod.status.phase === 'Running') {
         testRequests.push(createTestRequest(pod));
       }
@@ -161,8 +156,8 @@ const notInReplicaSet = async (db, pods) => {
 
     const results = await Promise.all(testRequests);
 
-    for (const key of results) {
-      if (key) return; // There's one in a rs, nothing to do
+    for (const result of results) {
+      if (result) return; // There's one in a rs, nothing to do
     }
 
     if (podElection(pods)) {
@@ -220,8 +215,7 @@ const podElection = pods => {
 
 const addrToAddLoop = (pods, members) => {
   let addrToAdd = [];
-  for (let i in pods) {
-    let pod = pods[i];
+  for (const pod of pods) {
     if (pod.status.phase !== 'Running') {
       continue;
     }
@@ -230,8 +224,7 @@ const addrToAddLoop = (pods, members) => {
     const podStableNetworkAddr = getPodStableNetworkAddressAndPort(pod);
     let podInRs = false;
 
-    for (let j in members) {
-      const member = members[j];
+    for (const member of members) {
       if (member.name === podIpAddr || member.name === podStableNetworkAddr) {
         /* If we have the pod's ip or the stable network address already in the config, no need to read it. Checks both the pod IP and the
         * stable network ID - we don't want any duplicates - either one of the two is sufficient to consider the node present. */
@@ -251,8 +244,7 @@ const addrToAddLoop = (pods, members) => {
 
 const addrToRemoveLoop = members => {
   let addrToRemove = [];
-  for (let i in members) {
-    const member = members[i];
+  for (const member of members) {
     if (memberShouldBeRemoved(member)) {
       addrToRemove.push(member.name);
     }
@@ -283,9 +275,7 @@ const getPodIpAddressAndPort = pod => {
  * @returns string the k8s MongoDB stable network address, or undefined.
  */
 const getPodStableNetworkAddressAndPort = pod => {
-  if (!config.k8sMongoServiceName || !pod || !pod.metadata || !pod.metadata.name || !pod.metadata.namespace) {
-    return;
-  }
+  if (!config.k8sMongoServiceName || !pod || !pod.metadata || !pod.metadata.name || !pod.metadata.namespace) return;
 
   return `${pod.metadata.name}.${config.k8sMongoServiceName}.${pod.metadata.namespace}.svc.${config.k8sClusterDomain}:${config.mongoPort}`;
 };
