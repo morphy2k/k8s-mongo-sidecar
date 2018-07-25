@@ -93,7 +93,7 @@ const workloop = async() => {
 };
 
 const finish = (err, client) => {
-  if (err) console.error('Error in workloop', err);
+  if (err) console.error('Error in workloop:', err);
 
   if (client) client.close();
 
@@ -120,7 +120,7 @@ const inReplicaSet = async (db, pods, status) => {
   }
 
   if (!primaryExists && podElection(pods)) {
-    console.log('Pod has been elected as a secondary to do primary work');
+    console.info('Pod has been elected as a secondary to do primary work');
     return primaryWork(db, pods, members, true);
   }
 
@@ -135,8 +135,8 @@ const primaryWork = async (db, pods, members, shouldForce) => {
   const addrToRemove = addrToRemoveLoop(members);
 
   if (addrToAdd.length || addrToRemove.length) {
-    console.log('Addresses to add:    ', addrToAdd);
-    console.log('Addresses to remove: ', addrToRemove);
+    console.info('Addresses to add:    ', addrToAdd);
+    console.info('Addresses to remove: ', addrToRemove);
 
     return mongo.addNewReplSetMembers(db, addrToAdd, addrToRemove, shouldForce);
   }
@@ -166,7 +166,7 @@ const notInReplicaSet = async (db, pods) => {
     }
 
     if (podElection(pods)) {
-      console.log('Pod has been elected for replica set initialization');
+      console.info('Pod has been elected for replica set initialization');
       const primary = pods[0]; // After the sort election, the 0-th pod should be the primary.
       const primaryStableNetworkAddressAndPort = getPodStableNetworkAddressAndPort(primary);
       // Prefer the stable network ID over the pod IP, if present.
@@ -190,13 +190,13 @@ const invalidReplicaSet = async (db, pods, status) => {
     members = status.members;
   }
 
-  console.log('Invalid replica set');
+  console.warn('Invalid replica set');
   if (!podElection(pods)) {
-    console.log('Didn\'t win the pod election, doing nothing');
+    console.info('Didn\'t win the pod election, doing nothing');
     return;
   }
 
-  console.log('Won the pod election, forcing re-initialization');
+  console.info('Won the pod election, forcing re-initialization');
   const addrToAdd = addrToAddLoop(pods, members);
   const addrToRemove = addrToRemoveLoop(members);
 

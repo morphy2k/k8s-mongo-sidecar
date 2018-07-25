@@ -25,7 +25,7 @@ const verifyCorrectnessOfDomain = async clusterDomain => {
 
   const servers = dns.getServers();
   if (!servers || !servers.length) {
-    console.log('dns.getServers() didn\'t return any results when verifying the cluster domain \'%s\'.', clusterDomain);
+    console.warn('dns.getServers() didn\'t return any results when verifying the cluster domain \'%s\'.', clusterDomain);
     return;
   }
 
@@ -38,7 +38,7 @@ const verifyCorrectnessOfDomain = async clusterDomain => {
       console.warn('Possibly wrong cluster domain name! Detected \'%s\' but expected similar to \'%s\'',  clusterDomain, host);
     }
     else {
-      console.log('The cluster domain \'%s\' was successfully verified.', clusterDomain);
+      console.info('The cluster domain \'%s\' was successfully verified.', clusterDomain);
     }
   } catch (err) {
     console.warn('Error occurred trying to verify the cluster domain \'%s\'',  clusterDomain);
@@ -57,7 +57,7 @@ const getK8sMongoServiceName = () => process.env.KUBERNETES_SERVICE_NAME || 'mon
  */
 const getMongoPort = () => {
   const mongoPort = process.env.MONGO_PORT || 27017;
-  console.log('Using mongo port: %s', mongoPort);
+  console.info('Using mongo port: %s', mongoPort);
   return mongoPort;
 };
 
@@ -68,7 +68,7 @@ const isConfigRS = () => {
   const configSvr = (process.env.MONGO_CONFIG_SVR || '').trim().toLowerCase();
   const configSvrBool = /^(?:y|yes|true|1)$/i.test(configSvr);
   if (configSvrBool) {
-    console.log('ReplicaSet is configured as a configsvr');
+    console.info('ReplicaSet is configured as a configsvr');
   }
 
   return configSvrBool;
