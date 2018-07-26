@@ -52,6 +52,7 @@ const getClient = async host => {
   host = host || localhost;
   let options = {
     authSource: 'admin',
+    authMechanism: config.authMechanism,
     ssl: config.mongoSSL,
     sslPass: config.mongoSSLPassword,
     checkServerIdentity: config.mongoSSLServerIdentityCheck
