@@ -87,9 +87,10 @@ module.exports = {
   k8sMongoPodLabels: process.env.KUBERNETES_POD_LABELS,
 
   mongoPort: getMongoPort(),
+  mongoDatabase: process.env.MONGO_DATABASE || 'local',
   mongoUsername: process.env.MONGO_USERNAME,
   mongoPassword: process.env.MONGO_PASSWORD,
-  mongoDatabase: process.env.MONGO_DATABASE || 'local',
+  authMechanism: process.env.MONGO_AUTH_MECHANISM || 'SCRAM-SHA-1',
   mongoSSL: stringToBool(process.env.MONGO_SSL),
   mongoSSLCA: process.env.MONGO_SSL_CA,
   mongoSSLCert: process.env.MONGO_SSL_CERT,

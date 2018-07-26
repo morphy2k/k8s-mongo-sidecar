@@ -28,6 +28,7 @@ An example Kubernetes replication controller can be found in the examples direct
 | MONGO_DATABASE | NO | local | Configures the mongo authentication database |
 | MONGO_USERNAME | NO | | Configures the mongo username for authentication |
 | MONGO_PASSWORD | NO | | Configures the mongo password for authentication |
+| MONGO_AUTH_MECHANISM | NO | SCRAM-SHA-1 | Configures the mongo authentication mechanism |
 | MONGO_SSL | NO | false | Enable MongoDB SSL connection |
 | MONGO_SSL_CA | NO | | Path to SSL CA Certificate |
 | MONGO_SSL_CERT | NO | | Path to SSL Certificate |
