@@ -1,4 +1,4 @@
-FROM node:8-alpine
+FROM node:lts-slim
 LABEL maintainer Markus Wiegand <mail@morphy2k.io>
 
 ENV NODE_ENV=production
