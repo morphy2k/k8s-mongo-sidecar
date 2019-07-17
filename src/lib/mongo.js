@@ -1,3 +1,4 @@
+/* eslint require-atomic-updates: 0 */
 'use strict';
 
 const fs = require('fs');
