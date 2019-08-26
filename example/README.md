@@ -4,7 +4,7 @@ With the release of [Stateful Sets](http://kubernetes.io/docs/concepts/abstracti
 
 ## Before You Start
 
--   Have a Kubernetes Cluster created with at least version 1.5.1
+-   Have a Kubernetes Cluster created with at least version **1.13**
 -   Have admin access to the cluster
 
 ## Creating the Storage Class

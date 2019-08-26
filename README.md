@@ -28,19 +28,20 @@ An example Kubernetes replication controller can be found in the examples direct
 | MONGO_DATABASE | NO | local | Configures the mongo authentication database |
 | MONGO_USERNAME | NO | | Configures the mongo username for authentication |
 | MONGO_PASSWORD | NO | | Configures the mongo password for authentication |
+| MONGO_AUTH_SOURCE | NO | admin | Configures the mongo database for authentication |
 | MONGO_AUTH_MECHANISM | NO | SCRAM-SHA-1 | Configures the mongo authentication mechanism |
-| MONGO_SSL | NO | false | Enable MongoDB SSL connection |
-| MONGO_SSL_CA | NO | | Path to SSL CA Certificate |
-| MONGO_SSL_CERT | NO | | Path to SSL Certificate |
-| MONGO_SSL_KEY | NO | | Path to SSL Key |
-| MONGO_SSL_PASS | NO | | SSL Certificate pass phrase |
-| MONGO_SSL_CRL | NO | | Path to SSL Certificate revocation list |
-| MONGO_SSL_IDENTITY_CHECK | NO | true | Server identity check during SSL. Checks server's hostname against the certificate |
+| MONGO_TLS | NO | false | Enable MongoDB TLS connection |
+| MONGO_TLS_CA | NO | | Path to TLS CA Certificate |
+| MONGO_TLS_CERT | NO | | Path to TLS Certificate |
+| MONGO_TLS_KEY | NO | | Path to TLS Key |
+| MONGO_TLS_PASS | NO | | TLS Certificate pass phrase |
+| MONGO_TLS_CRL | NO | | Path to TLS Certificate revocation list |
+| MONGO_TLS_IDENTITY_CHECK | NO | true | Server identity check during TLS. Checks server's hostname against the certificate |
 | SIDECAR_SLEEP_SECONDS | NO | 5 | This is how long to sleep between work cycles. |
 | SIDECAR_UNHEALTHY_SECONDS | NO | 15 | This is how many seconds a replica set member has to get healthy before automatically being removed from the replica set. |
 
-#### MongoDB SSL
-The following is an example of how you would update the mongo command enabling SSL and using a certificate obtained from a secret and mounted at `/data/ssl/mongo/`
+#### MongoDB TLS
+The following is an example of how you would update the mongo command enabling TLS and using a certificate obtained from a secret and mounted at `/data/tls/mongo/`
 
 Command
 ```yaml
@@ -50,11 +51,9 @@ Command
             - mongod
           args:
             - "--replSet=rs0"
-            - "--sslMode=requireSSL"
-            - "--sslCAFile=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
-            - "--sslPEMKeyFile=/data/ssl/mongo/combined.pem"
-            - "--smallfiles"
-            - "--noprealloc"
+            - "--tlsMode=requireTLS"
+            - "--tlsCAFile=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+            - "--tlsCertificateKeyFile=/data/tls/mongo/full.pem"
             - "--bind_ip=0.0.0.0"
 ```
 
@@ -63,42 +62,42 @@ Environment variables, Volume & Volume Mounts
           volumeMounts:
             - name: mongo-persistent-storage
               mountPath: /data/db
-            - name: mongo-ssl
-              mountPath: /data/ssl/mongo
+            - name: mongo-tls
+              mountPath: /data/tls/mongo
         - name: mongo-sidecar
           image: morphy/k8s-mongo-sidecar
           env:
             - name: KUBERNETES_POD_LABELS
               value: "role=mongo,environment=prod"
-            - name: MONGO_SSL
+            - name: MONGO_TLS
               value: "true"
-            - name: MONGO_SSL_CA
+            - name: MONGO_TLS_CA
               value: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
-            - name: "MONGO_SSL_CERT"
-              value: "/data/ssl/mongo/cert.pem"
-            - name: MONGO_SSL_KEY
-              value: "/data/ssl/mongo/key.pem"
+            - name: "MONGO_TLS_CERT"
+              value: "/data/tls/mongo/cert.pem"
+            - name: MONGO_TLS_KEY
+              value: "/data/tls/mongo/key.pem"
           volumeMounts:
-            - name: mongo-ssl
-              mountPath: /data/ssl/mongo
+            - name: mongo-tls
+              mountPath: /data/tls/mongo
       volumes:
-        - name: mongo-ssl
+        - name: mongo-tls
           secret:
-            secretName: mongo-ssl
+            secretName: mongo-tls
             defaultMode: 256 # file permission 0400
 ```
 
-#### Creating Secret for SSL
+#### Creating Secret for TLS
 
 1.  Generate a certificate with your Kubernetes cluster as CA that is explained [here](https://kubernetes.io/docs/tasks/tls/managing-tls-in-a-cluster/)
 2.  Merge your certificate and key named as `cert.pem` and `key.pem` into a single file
 ```bash
-cat cert.pem key.pem > combined.pem
+cat cert.pem key.pem > full.pem
 ```
 3.  Push the secrets to your cluster
 ```bash
-kubectl create secret generic mongo-ssl \
---from-file=combined.pem \
+kubectl create secret generic mongo-tls \
+--from-file=full.pem \
 --from-file=key.pem \
 --from-file=cert.pem
 ```
