@@ -90,6 +90,7 @@ module.exports = {
   mongoDatabase: process.env.MONGO_DATABASE || 'local',
   mongoUsername: process.env.MONGO_USERNAME,
   mongoPassword: process.env.MONGO_PASSWORD,
+  mongoAuthSource: process.env.MONGO_AUTH_SOURCE || 'admin',
   authMechanism: process.env.MONGO_AUTH_MECHANISM || 'SCRAM-SHA-1',
   mongoSSL: stringToBool(process.env.MONGO_SSL),
   mongoSSLCA: process.env.MONGO_SSL_CA,
