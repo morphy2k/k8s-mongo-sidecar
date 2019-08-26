@@ -24,15 +24,15 @@ const getConnectionURI = host => {
   return `mongodb://${credentials}${host}:${config.mongoPort}/${config.mongoDatabase}`;
 };
 
-const getSSLCertificates = async () => {
+const getTLSCertificates = async () => {
   const readFile = promisify(fs.readFile);
 
   try {
     let tasks = [];
-    if (config.mongoSSLCert) tasks[0] = readFile(config.mongoSSLCert);
-    if (config.mongoSSLKey) tasks[1] = readFile(config.mongoSSLKey);
-    if (config.mongoSSLCA) tasks[2] = readFile(config.mongoSSLCA);
-    if (config.mongoSSLCRL) tasks[3] = readFile(config.mongoSSLCRL);
+    if (config.mongoTLSCert) tasks[0] = readFile(config.mongoTLSCert);
+    if (config.mongoTLSKey) tasks[1] = readFile(config.mongoTLSKey);
+    if (config.mongoTLSCA) tasks[2] = readFile(config.mongoTLSCA);
+    if (config.mongoTLSCRL) tasks[3] = readFile(config.mongoTLSCRL);
 
     const files = await Promise.all(tasks);
 
@@ -52,17 +52,17 @@ const getClient = async host => {
 
   host = host || localhost;
   let options = {
-    authSource: 'admin',
-    authMechanism: config.authMechanism,
-    ssl: config.mongoSSL,
-    sslPass: config.mongoSSLPassword,
-    checkServerIdentity: config.mongoSSLServerIdentityCheck
     authSource: config.mongoAuthSource,
+    authMechanism: config.mongoUsername ? config.authMechanism: '',
+    ssl: config.mongoTLS,
+    sslPass: config.mongoTLSPassword,
+    checkServerIdentity: config.mongoTLSServerIdentityCheck,
+    useNewUrlParser: true
   };
 
   try {
-    if (config.mongoSSL) {
-      certificates = certificates || await getSSLCertificates();
+    if (config.mongoTLS) {
+      certificates = certificates || await getTLSCertificates();
       Object.assign(options, certificates);
     }
     const uri = getConnectionURI(host);
