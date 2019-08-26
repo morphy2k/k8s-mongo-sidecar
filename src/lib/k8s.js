@@ -1,12 +1,17 @@
 'use strict';
 
-const Client = require('kubernetes-client').Client;
-const clientConfig = require('kubernetes-client').config;
+const { Client, KubeConfig } = require('kubernetes-client');
+const Request = require('kubernetes-client/backends/request');
 
 const config = require('./config');
 
+const kubeconfig = new KubeConfig();
+kubeconfig.loadFromCluster();
 
-const client = new Client({ config: clientConfig.getInCluster() });
+const client = new Client({
+  backend: new Request({ kubeconfig }),
+  version: '1.13'
+});
 
 const init = async() => {
   return await client.loadSpec();
