@@ -57,6 +57,7 @@ const getClient = async host => {
     ssl: config.mongoSSL,
     sslPass: config.mongoSSLPassword,
     checkServerIdentity: config.mongoSSLServerIdentityCheck
+    authSource: config.mongoAuthSource,
   };
 
   try {
