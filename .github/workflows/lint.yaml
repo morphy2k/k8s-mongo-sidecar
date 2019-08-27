@@ -16,7 +16,7 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Install packages
-      run: npm install --only=dev
+      run: npm install --loglevel=verbose
 
     - name: Run linter
       run: npm run lint
