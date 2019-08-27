@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/morphy2k/k8s-mongo-sidecar.svg?branch=master)](https://travis-ci.org/morphy2k/k8s-mongo-sidecar) [![David](https://david-dm.org/morphy2k/k8s-mongo-sidecar.svg)](https://david-dm.org)
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fmorphy2k%2Fk8s-mongo-sidecar%2Fbadge&style=flat)](https://actions-badge.atrox.dev/morphy2k/k8s-mongo-sidecar/goto)
+[![David](https://david-dm.org/morphy2k/k8s-mongo-sidecar.svg)](https://david-dm.org)
 
 # Mongo Kubernetes Replica Set Sidecar
 
