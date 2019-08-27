@@ -1,0 +1,22 @@
+name: Lint
+on: push
+jobs:
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Set up NodeJS
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v1
+
+    - name: Install packages
+      run: npm install --loglevel=verbose
+
+    - name: Run linter
+      run: npm run lint
