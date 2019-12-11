@@ -1,5 +1,5 @@
 FROM node:lts-slim
-LABEL maintainer Markus Wiegand <mail@morphy2k.io>
+LABEL maintainer Markus Wiegand <mail@morphy2k.dev>
 
 ENV NODE_ENV=production
 
