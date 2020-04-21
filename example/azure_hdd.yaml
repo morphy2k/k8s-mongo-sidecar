@@ -1,9 +1,8 @@
+apiVersion: storage.k8s.io/v1
 kind: StorageClass
-apiVersion: storage.k8s.io/v1beta1
 metadata:
   name: slow
 provisioner: kubernetes.io/azure-disk
 parameters:
-  skuName: Standard_LRS
-  location: <location>
-  storageAccount: <azure_storage_account_name>
+  storageaccounttype: Standard_LRS
+  kind: Shared
