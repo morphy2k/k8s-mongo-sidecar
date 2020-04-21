@@ -1,5 +1,13 @@
 name: Lint
-on: push
+on:
+  push:
+    paths:
+      - '**.js'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.eslintrc.json'
+      - '.github/workflows/lint.yaml'
+
 jobs:
 
   lint:
@@ -10,9 +18,9 @@ jobs:
     - name: Set up NodeJS
       uses: actions/setup-node@v1
       with:
-        node-version: '10.x'
+        node-version: '12.x'
 
-    - name: Check out code into the Go module directory
+    - name: Check out code into the project directory
       uses: actions/checkout@v1
 
     - name: Install packages
