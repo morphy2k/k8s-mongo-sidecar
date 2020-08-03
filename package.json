@@ -43,6 +43,6 @@
     "ip": "^1.1.5",
     "kubernetes-client": "^9.0.0",
     "luxon": "^1.24.1",
-    "mongodb": "^3.5.9"
+    "mongodb": "^3.6.0"
   }
 }
