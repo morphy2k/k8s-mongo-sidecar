@@ -123,7 +123,7 @@ const replSetReconfig = (db, rsConfig, force) => {
 const addNewReplSetMembers = async (db, addrToAdd, addrToRemove, shouldForce) => {
   try {
     let rsConfig = await replSetGetConfig(db);
-	let limit = { count: (shouldForce?100:1} };
+	let limit = { count: (shouldForce?100:1) };
     removeDeadMembers(rsConfig, addrToRemove, limit);
     addNewMembers(rsConfig, addrToAdd, limit);
     return replSetReconfig(db, rsConfig, shouldForce);
