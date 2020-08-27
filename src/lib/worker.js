@@ -26,6 +26,7 @@ const init = async() => {
     hostIp = await lookup(hostName);
     hostIp = hostIp.address;
     hostIpAndPort = hostIp + ':' + config.mongoPort;
+	console.info('Running on host '+hostIpAndPort+' hostname '+hostName);
   } catch (err) {
     return Promise.reject(err);
   }
@@ -237,6 +238,7 @@ const addrToAddLoop = (pods, members) => {
       // If the node was not present, we prefer the stable network ID, if present.
       const addrToUse = podStableNetworkAddr || podIpAddr;
       addrToAdd.push(addrToUse);
+	  console.info('Detected new pod not in replicaset: '+addrToUse);
     }
   }
   return addrToAdd;
@@ -247,6 +249,7 @@ const addrToRemoveLoop = members => {
   for (const member of members) {
     if (memberShouldBeRemoved(member)) {
       addrToRemove.push(member.name);
+	  console.info('Detected unhealthy/missing pod in replicaset: '+member.name);
     }
   }
   return addrToRemove;

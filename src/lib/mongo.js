@@ -57,7 +57,8 @@ const getClient = async host => {
     ssl: config.mongoTLS,
     sslPass: config.mongoTLSPassword,
     checkServerIdentity: config.mongoTLSServerIdentityCheck,
-    useNewUrlParser: true
+    useNewUrlParser: true,
+	useUnifiedTopology: true
   };
 
   try {
@@ -122,7 +123,7 @@ const replSetReconfig = (db, rsConfig, force) => {
 const addNewReplSetMembers = async (db, addrToAdd, addrToRemove, shouldForce) => {
   try {
     let rsConfig = await replSetGetConfig(db);
-	let limit = 1;
+	let limit = { count: (shouldForce?100:1} };
     removeDeadMembers(rsConfig, addrToRemove, limit);
     addNewMembers(rsConfig, addrToAdd, limit);
     return replSetReconfig(db, rsConfig, shouldForce);
@@ -155,7 +156,7 @@ const addNewMembers = (rsConfig, addrsToAdd, limit) => {
       }
     }
 
-    if (exists || limit===0) continue;
+    if (exists || limit.count===0) continue;
 
     const cfg = {
       _id: ++max,
@@ -163,7 +164,7 @@ const addNewMembers = (rsConfig, addrsToAdd, limit) => {
     };
 
     rsConfig.members.push(cfg);
-	--limit;
+	limit.count--;
   }
 };
 
@@ -172,9 +173,9 @@ const removeDeadMembers = (rsConfig, addrsToRemove, limit) => {
 
   for (const addr of addrsToRemove) {
     for (const i in rsConfig.members) {
-      if (rsConfig.members[i].host === addr && limit > 0) {
+      if (rsConfig.members[i].host === addr && limit.count > 0) {
         rsConfig.members.splice(i, 1);
-		--limit;
+		limit.count--;
         break;
       }
     }
