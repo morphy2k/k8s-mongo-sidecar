@@ -122,15 +122,16 @@ const replSetReconfig = (db, rsConfig, force) => {
 const addNewReplSetMembers = async (db, addrToAdd, addrToRemove, shouldForce) => {
   try {
     let rsConfig = await replSetGetConfig(db);
-    removeDeadMembers(rsConfig, addrToRemove);
-    addNewMembers(rsConfig, addrToAdd);
+	let limit = 1;
+    removeDeadMembers(rsConfig, addrToRemove, limit);
+    addNewMembers(rsConfig, addrToAdd, limit);
     return replSetReconfig(db, rsConfig, shouldForce);
   } catch (err) {
     return Promise.reject(err);
   }
 };
 
-const addNewMembers = (rsConfig, addrsToAdd) => {
+const addNewMembers = (rsConfig, addrsToAdd, limit) => {
   if (!addrsToAdd || !addrsToAdd.length) return;
 
   // Follows what is basically in mongo's rs.add function
@@ -154,7 +155,7 @@ const addNewMembers = (rsConfig, addrsToAdd) => {
       }
     }
 
-    if (exists) continue;
+    if (exists || limit===0) continue;
 
     const cfg = {
       _id: ++max,
@@ -162,16 +163,18 @@ const addNewMembers = (rsConfig, addrsToAdd) => {
     };
 
     rsConfig.members.push(cfg);
+	--limit;
   }
 };
 
-const removeDeadMembers = (rsConfig, addrsToRemove) => {
+const removeDeadMembers = (rsConfig, addrsToRemove, limit) => {
   if (!addrsToRemove || !addrsToRemove.length) return;
 
   for (const addr of addrsToRemove) {
     for (const i in rsConfig.members) {
-      if (rsConfig.members[i].host === addr) {
+      if (rsConfig.members[i].host === addr && limit > 0) {
         rsConfig.members.splice(i, 1);
+		--limit;
         break;
       }
     }
