@@ -129,6 +129,9 @@ const inReplicaSet = async (db, pods, status) => {
 
 const primaryWork = async (db, pods, members, shouldForce) => {
 
+  console.info('Members: ', members);
+  console.info('Pods: ', pods);
+
   // Loop over all the pods we have and see if any of them aren't in the current rs members array
   // If they aren't in there, add them
   const addrToAdd = addrToAddLoop(pods, members);
