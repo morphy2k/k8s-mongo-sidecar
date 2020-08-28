@@ -262,7 +262,7 @@ const addrToRemoveLoop = members => {
 };
 
 const memberShouldBeRemoved = member => !member.health
-      && DateTime.local().minus({ seconds: unhealthySeconds }) > DateTime.fromISO(member.lastHeartbeatRecv);
+      && DateTime.fromISO(member.lastHeartbeatRecv).valueOf() + { seconds: unhealthySeconds }*1000 > DateTime.utc();
 
 /**
  * @param pod this is the Kubernetes pod, containing the info.
