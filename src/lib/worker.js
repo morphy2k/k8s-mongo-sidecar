@@ -113,15 +113,17 @@ const inReplicaSet = async (db, pods, status) => {
       if (member.self) return primaryWork(db, pods, members, false);
 
       primaryExists = true;
-      break;
+	  console.info('We are not primary but someone else is.');
+      return;
     }
   }
 
-  if (!primaryExists && podElection(pods)) {
+  if (podElection(pods)) {
     console.info('Pod has been elected as a secondary to do primary work');
     return primaryWork(db, pods, members, true);
   }
 
+  console.info('No primary, but another pod was elected to do primary work');
   return;
 };
 
@@ -139,6 +141,7 @@ const primaryWork = async (db, pods, members, shouldForce) => {
     return mongo.addNewReplSetMembers(db, addrToAdd, addrToRemove, shouldForce);
   }
 
+  console.info('Nothing to do.');
   return;
 };
 
@@ -150,9 +153,7 @@ const notInReplicaSet = async (db, pods) => {
     // If we're not in a rs and no one else is in a rs, elect one to kick things off
     let testRequests = [];
     for (const pod of pods) {
-      if (pod.status.phase === 'Running') {
-        testRequests.push(createTestRequest(pod));
-      }
+      testRequests.push(createTestRequest(pod));
     }
 
     const results = await Promise.all(testRequests);
@@ -170,6 +171,7 @@ const notInReplicaSet = async (db, pods) => {
       return mongo.initReplSet(db, primaryAddressAndPort);
     }
 
+    console.info('Some other pod has been elected for replica set initialization');
     return;
   } catch (err) {
     return Promise.reject(err);
@@ -211,6 +213,7 @@ const podElection = pods => {
   });
 
   // Are we the lucky one?
+  console.info('Electing ip to do primary work: '+pods[0].status.podIP+' Our ip is '+hostIp);
   return pods[0].status.podIP === hostIp;
 };
 
