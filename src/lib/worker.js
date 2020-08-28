@@ -264,7 +264,7 @@ const addrToRemoveLoop = members => {
 const memberShouldBeRemoved = member => {
 	if (!member.health)
 	{
-      let lastHeartbeatTick = DateTime.fromISO(member.lastHeartbeatRecv).valueOf();
+      let lastHeartbeatTick = Date.parse(member.lastHeartbeatRecv);
       let nowTick = DateTime.utc();
 	  console.info('Member: '+member.name+' Last Heartbeat: '+lastHeartbeatTick+'  Now: '+nowTick);
 	  if (lastHeartbeatTick + unhealthySeconds*1000 < nowTick)
