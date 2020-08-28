@@ -261,9 +261,17 @@ const addrToRemoveLoop = members => {
   return addrToRemove;
 };
 
-const memberShouldBeRemoved = member => !member.health
-      && DateTime.fromISO(member.lastHeartbeatRecv).valueOf() + { seconds: unhealthySeconds }*1000 > DateTime.utc();
-
+const memberShouldBeRemoved = member => {
+	if (!member.health)
+	{
+      let lastHeartbeatTick = DateTime.fromISO(member.lastHeartbeatRecv).valueOf();
+      let nowTick = DateTime.utc();
+	  console.info('Member: '+member.name+' Last Heartbeat: '+lastHeartbeatTick+'  Now: '+nowTick);
+	  if (lastHeartbeatTick + unhealthySeconds*1000 < nowTick)
+		return true;
+	}
+	return false;
+}
 /**
  * @param pod this is the Kubernetes pod, containing the info.
  * @returns string - podIp the pod's IP address with the port from config attached at the end. Example
