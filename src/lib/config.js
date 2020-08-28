@@ -101,7 +101,7 @@ module.exports = {
   mongoTLSServerIdentityCheck: stringToBool(process.env.MONGO_TLS_IDENTITY_CHECK),
 
   loopSleepSeconds: process.env.SIDECAR_SLEEP_SECONDS || 5,
-  unhealthySeconds: process.env.SIDECAR_UNHEALTHY_SECONDS || 15,
+  unhealthySeconds: process.env.SIDECAR_UNHEALTHY_SECONDS || 30,
   env: process.env.NODE_ENV || 'local',
   isConfigRS: isConfigRS(),
 };

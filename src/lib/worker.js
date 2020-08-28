@@ -113,7 +113,7 @@ const inReplicaSet = async (db, pods, status) => {
       if (member.self) return primaryWork(db, pods, members, false);
 
       primaryExists = true;
-	  console.info('We are not primary but someone else is.');
+//	  console.info('We are not primary but someone else is.');
       return;
     }
   }
@@ -123,14 +123,14 @@ const inReplicaSet = async (db, pods, status) => {
     return primaryWork(db, pods, members, true);
   }
 
-  console.info('No primary, but another pod was elected to do primary work');
+//  console.info('No primary, but another pod was elected to do primary work');
   return;
 };
 
 const primaryWork = async (db, pods, members, shouldForce) => {
 
-  console.info('Members: ', members);
-  console.info('Pods: ', pods);
+//  console.info('Members: ', members);
+//  console.info('Pods: ', pods);
 
   // Loop over all the pods we have and see if any of them aren't in the current rs members array
   // If they aren't in there, add them
@@ -144,7 +144,7 @@ const primaryWork = async (db, pods, members, shouldForce) => {
     return mongo.addNewReplSetMembers(db, addrToAdd, addrToRemove, shouldForce);
   }
 
-  console.info('Nothing to do.');
+//  console.info('Nothing to do.');
   return;
 };
 
@@ -193,7 +193,7 @@ const invalidReplicaSet = async (db, pods, status) => {
 
   console.warn('Invalid replica set');
   if (!podElection(pods)) {
-    console.info('Didn\'t win the pod election, doing nothing');
+//    console.info('Didn\'t win the pod election, doing nothing');
     return;
   }
 
@@ -267,7 +267,7 @@ const memberShouldBeRemoved = member => {
       let lastHeartbeatTick = Date.parse(member.lastHeartbeatRecv);
       let nowTick = DateTime.utc();
 	  console.info('Member: '+member.name+' Last Heartbeat: '+lastHeartbeatTick+'  Now: '+nowTick);
-	  if (lastHeartbeatTick + unhealthySeconds*1000 < nowTick)
+	  if (nowTick - lastHeartbeatTick > unhealthySeconds*1000)
 		return true;
 	}
 	return false;
