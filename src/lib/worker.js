@@ -26,7 +26,7 @@ const init = async() => {
     hostIp = await lookup(hostName);
     hostIp = hostIp.address;
     hostIpAndPort = hostIp + ':' + config.mongoPort;
-	console.info('Running on host '+hostIpAndPort+' hostname '+hostName);
+    console.info('Running on host '+hostIpAndPort+' hostname '+hostName);
   } catch (err) {
     return Promise.reject(err);
   }
@@ -107,13 +107,11 @@ const inReplicaSet = async (db, pods, status) => {
   // If we're already in a rs and NO ONE is a primary, elect someone to do the work for a primary
   const members = status.members;
 
-  let primaryExists = false;
   for (const member of members) {
     if (member.state === 1) {
       if (member.self) return primaryWork(db, pods, members, false);
 
-      primaryExists = true;
-//	  console.info('We are not primary but someone else is.');
+      //console.info('We are not primary but someone else is.');
       return;
     }
   }
@@ -123,14 +121,14 @@ const inReplicaSet = async (db, pods, status) => {
     return primaryWork(db, pods, members, true);
   }
 
-//  console.info('No primary, but another pod was elected to do primary work');
+  //console.info('No primary, but another pod was elected to do primary work');
   return;
 };
 
 const primaryWork = async (db, pods, members, shouldForce) => {
 
-//  console.info('Members: ', members);
-//  console.info('Pods: ', pods);
+  //console.info('Members: ', members);
+  //console.info('Pods: ', pods);
 
   // Loop over all the pods we have and see if any of them aren't in the current rs members array
   // If they aren't in there, add them
@@ -144,7 +142,7 @@ const primaryWork = async (db, pods, members, shouldForce) => {
     return mongo.addNewReplSetMembers(db, addrToAdd, addrToRemove, shouldForce);
   }
 
-//  console.info('Nothing to do.');
+  //console.info('Nothing to do.');
   return;
 };
 
@@ -193,7 +191,7 @@ const invalidReplicaSet = async (db, pods, status) => {
 
   console.warn('Invalid replica set');
   if (!podElection(pods)) {
-//    console.info('Didn\'t win the pod election, doing nothing');
+    //console.info('Didn\'t win the pod election, doing nothing');
     return;
   }
 
@@ -244,7 +242,7 @@ const addrToAddLoop = (pods, members) => {
       // If the node was not present, we prefer the stable network ID, if present.
       const addrToUse = podStableNetworkAddr || podIpAddr;
       addrToAdd.push(addrToUse);
-	  console.info('Detected new pod not in replicaset: '+addrToUse);
+      console.info('Detected new pod not in replicaset: '+addrToUse);
     }
   }
   return addrToAdd;
@@ -255,23 +253,23 @@ const addrToRemoveLoop = members => {
   for (const member of members) {
     if (memberShouldBeRemoved(member)) {
       addrToRemove.push(member.name);
-	  console.info('Detected unhealthy/missing pod in replicaset: '+member.name);
+      console.info('Detected unhealthy/missing pod in replicaset: '+member.name);
     }
   }
   return addrToRemove;
 };
 
 const memberShouldBeRemoved = member => {
-	if (!member.health)
-	{
-      let lastHeartbeatTick = Date.parse(member.lastHeartbeatRecv);
-      let nowTick = DateTime.utc();
-	  console.info('Member: '+member.name+' Last Heartbeat: '+lastHeartbeatTick+'  Now: '+nowTick);
-	  if (nowTick - lastHeartbeatTick > unhealthySeconds*1000)
-		return true;
-	}
-	return false;
-}
+  if (!member.health)
+  {
+    let lastHeartbeatTick = Date.parse(member.lastHeartbeatRecv);
+    let nowTick = DateTime.utc();
+    console.info('Member: '+member.name+' Last Heartbeat: '+lastHeartbeatTick+'  Now: '+nowTick);
+    if (nowTick - lastHeartbeatTick > unhealthySeconds*1000)
+      return true;
+  }
+  return false;
+};
 /**
  * @param pod this is the Kubernetes pod, containing the info.
  * @returns string - podIp the pod's IP address with the port from config attached at the end. Example
