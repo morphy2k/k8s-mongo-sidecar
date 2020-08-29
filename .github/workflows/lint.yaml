@@ -1,5 +1,7 @@
 name: Lint
 on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
   push:
     paths:
       - '**.js'
@@ -16,15 +18,15 @@ jobs:
     steps:
 
     - name: Set up NodeJS
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2-beta
       with:
         node-version: '12.x'
 
     - name: Check out code into the project directory
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
 
     - name: Install packages
-      run: npm install --loglevel=verbose
+      run: npm ci
 
     - name: Run linter
       run: npm run lint
