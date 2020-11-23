@@ -37,7 +37,7 @@
     "replicaset"
   ],
   "devDependencies": {
-    "eslint": "^7.4.0"
+    "eslint": "^7.14.0"
   },
   "dependencies": {
     "ip": "^1.1.5",
