@@ -39,7 +39,7 @@ An example Kubernetes replication controller can be found in the examples direct
 | MONGO_TLS_CRL | NO | | Path to TLS Certificate revocation list |
 | MONGO_TLS_IDENTITY_CHECK | NO | true | Server identity check during TLS. Checks server's hostname against the certificate |
 | SIDECAR_SLEEP_SECONDS | NO | 5 | This is how long to sleep between work cycles. |
-| SIDECAR_UNHEALTHY_SECONDS | NO | 15 | This is how many seconds a replica set member has to get healthy before automatically being removed from the replica set. |
+| SIDECAR_UNHEALTHY_SECONDS | NO | 30 | This is how many seconds a replica set member has to get healthy before automatically being removed from the replica set. |
 
 #### MongoDB TLS
 The following is an example of how you would update the mongo command enabling TLS and using a certificate obtained from a secret and mounted at `/data/tls/mongo/`
