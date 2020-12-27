@@ -128,27 +128,32 @@ const addNewReplSetMembers = async (
 ) => {
     try {
         let rsConfig = await replSetGetConfig(db);
-        removeDeadMembers(rsConfig, addrToRemove);
-        addNewMembers(rsConfig, addrToAdd);
+        const limit = shouldForce ? 50 : 1;
+        const removed = removeDeadMembers(rsConfig, addrToRemove, limit);
+        if (shouldForce || !removed) addNewMembers(rsConfig, addrToAdd, limit);
         return replSetReconfig(db, rsConfig, shouldForce);
     } catch (err) {
         return Promise.reject(err);
     }
 };
 
-const addNewMembers = (rsConfig, addrsToAdd) => {
+const addNewMembers = (rsConfig, addrsToAdd, limit) => {
     if (!addrsToAdd || !addrsToAdd.length) return;
 
     // Follows what is basically in mongo's rs.add function
     let max = 0;
 
-    for (const members of rsConfig.members) {
-        if (members._id > max) {
-            max = members._id;
+    for (const member of rsConfig.members) {
+        if (member._id > max) {
+            max = member._id;
         }
     }
 
+    let added = 0;
+
     for (const addr of addrsToAdd) {
+        if (added === limit) return;
+
         // Somehow we can get a race condition where the member config has been updated since we created the list of
         // addresses to add (addrsToAdd) ... so do another loop to make sure we're not adding duplicates
         let exists = false;
@@ -171,20 +176,29 @@ const addNewMembers = (rsConfig, addrsToAdd) => {
         };
 
         rsConfig.members.push(cfg);
+        added++;
     }
+
+    return added;
 };
 
-const removeDeadMembers = (rsConfig, addrsToRemove) => {
+const removeDeadMembers = (rsConfig, addrsToRemove, limit) => {
     if (!addrsToRemove || !addrsToRemove.length) return;
 
+    let removed = 0;
+
     for (const addr of addrsToRemove) {
+        if (removed === limit) return;
         for (const i in rsConfig.members) {
             if (rsConfig.members[i].host === addr) {
                 rsConfig.members.splice(i, 1);
+                removed++;
                 break;
             }
         }
     }
+
+    return removed;
 };
 
 const isInReplSet = async (ip) => {
