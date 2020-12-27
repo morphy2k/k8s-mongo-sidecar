@@ -1,0 +1,12 @@
+{
+  "semi": true,
+  "tabWidth": 2,
+  "overrides": [
+    {
+      "files": "*.js",
+      "options": {
+        "tabWidth": 4
+      }
+    }
+  ]
+}

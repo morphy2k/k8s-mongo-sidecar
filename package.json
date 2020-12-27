@@ -22,8 +22,8 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "lint": "eslint .",
-    "pretest": "npm run lint",
+    "lint": "eslint src/ && prettier --check src/",
+    "fmt": "prettier --write src/",
     "test": "echo \"No tests\""
   },
   "keywords": [
@@ -37,12 +37,14 @@
     "replicaset"
   ],
   "devDependencies": {
-    "eslint": "^7.4.0"
+    "eslint": "^7.16.0",
+    "eslint-config-prettier": "^7.1.0",
+    "prettier": "2.2.1"
   },
   "dependencies": {
     "ip": "^1.1.5",
     "kubernetes-client": "^9.0.0",
-    "luxon": "^1.24.1",
-    "mongodb": "^3.5.9"
+    "luxon": "^1.25.0",
+    "mongodb": "^3.6.3"
   }
 }
