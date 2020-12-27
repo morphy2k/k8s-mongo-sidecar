@@ -17,7 +17,7 @@
     "url": "https://github.com/morphy2k/k8s-mongo-sidecar/issues"
   },
   "engines": {
-    "node": ">=8.11.0"
+    "node": ">=14.15.3"
   },
   "main": "src/index.js",
   "scripts": {
