@@ -1,5 +1,4 @@
 ![Lint](https://github.com/morphy2k/k8s-mongo-sidecar/workflows/Lint/badge.svg)
-[![Dependabot status](https://api.dependabot.com/badges/status?host=github&repo=morphy2k/k8s-mongo-sidecar)](https://dependabot.com/)
 
 # Mongo Kubernetes Replica Set Sidecar
 
