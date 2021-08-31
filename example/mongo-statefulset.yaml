@@ -41,8 +41,8 @@ metadata:
     name: mongo
 spec:
   ports:
-  - port: 27017
-    targetPort: 27017
+    - port: 27017
+      targetPort: 27017
   clusterIP: None
   selector:
     role: mongo
@@ -68,7 +68,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: mongo
-          image: mongo:4
+          image: mongo:4.4
           command:
             - mongod
           args:
@@ -87,11 +87,11 @@ spec:
             - name: KUBERNETES_SERVICE_NAME
               value: "mongo"
   volumeClaimTemplates:
-  - metadata:
-      name: mongo-persistent-storage
-    spec:
-      storageClassName: fast
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: 2Gi
+    - metadata:
+        name: mongo-persistent-storage
+      spec:
+        storageClassName: standard
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
