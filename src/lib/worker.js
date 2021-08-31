@@ -168,9 +168,8 @@ const notInReplicaSet = async (db, pods) => {
         if (podElection(pods)) {
             console.info("Pod has been elected for replica set initialization");
             const primary = pods[0]; // After the sort election, the 0-th pod should be the primary.
-            const primaryStableNetworkAddressAndPort = getPodStableNetworkAddressAndPort(
-                primary
-            );
+            const primaryStableNetworkAddressAndPort =
+                getPodStableNetworkAddressAndPort(primary);
             // Prefer the stable network ID over the pod IP, if present.
             const primaryAddressAndPort =
                 primaryStableNetworkAddressAndPort || hostIpAndPort;
