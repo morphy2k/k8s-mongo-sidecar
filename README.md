@@ -1,5 +1,7 @@
 ![Lint](https://github.com/morphy2k/k8s-mongo-sidecar/workflows/Lint/badge.svg)
 
+**This repository only gets important security updates. I recommend to use the [Kubernetes Operator](https://github.com/mongodb/mongodb-kubernetes-operator) in the future.**
+
 # Mongo Kubernetes Replica Set Sidecar
 
 This project is as a PoC to setup a MongoDB replica set using Kubernetes. It should handle resizing of any type and be resilient to the various conditions both MongoDB and Kubernetes can find themselves in.
