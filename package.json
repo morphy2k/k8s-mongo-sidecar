@@ -1,7 +1,7 @@
 {
   "name": "k8s-mongo-sidecar",
   "description": "Kubernetes sidecar for mongoDB",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "license": "MIT",
   "author": {
     "name": "Markus Wiegand",
