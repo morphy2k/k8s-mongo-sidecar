@@ -42,7 +42,7 @@
     "prettier": "2.3.2"
   },
   "dependencies": {
-    "ip": "^1.1.5",
+    "ip": "^1.1.8",
     "kubernetes-client": "^9.0.0",
     "luxon": "^2.0.2",
     "mongodb": "^3.7.0"
