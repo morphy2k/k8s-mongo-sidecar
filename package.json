@@ -44,7 +44,7 @@
   "dependencies": {
     "ip": "^1.1.5",
     "kubernetes-client": "^9.0.0",
-    "luxon": "^2.0.2",
+    "luxon": "^3.0.4",
     "mongodb": "^3.7.0"
   }
 }
