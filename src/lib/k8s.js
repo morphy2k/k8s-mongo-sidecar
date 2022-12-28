@@ -1,28 +1,27 @@
 "use strict";
-
-const { Client, KubeConfig } = require("kubernetes-client");
-const Request = require("kubernetes-client/backends/request");
-
+const k8s = require("@kubernetes/client-node");
 const config = require("./config");
 
-const kubeconfig = new KubeConfig();
-kubeconfig.loadFromCluster();
+const kc = new k8s.KubeConfig();
+kc.loadFromDefault();
 
-const client = new Client({
-    backend: new Request({ kubeconfig }),
-    version: "1.13",
-});
+const client = kc.makeApiClient(k8s.CoreV1Api);
 
 const init = async () => {
-    return await client.loadSpec();
+    console.log("k8s client init done");
 };
 
 const getMongoPods = async () => {
     try {
-        const res = await client.api.v1
-            .namespaces(config.k8sNamespace)
-            .pods.get({ qs: { labelSelector: config.k8sMongoPodLabels } });
-        return res.body.items;
+        const res = await client.listNamespacedPod(
+            config.k8sNamespace,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            config.k8sMongoPodLabels
+        );
+        return res.body;
     } catch (err) {
         return Promise.reject(err);
     }
